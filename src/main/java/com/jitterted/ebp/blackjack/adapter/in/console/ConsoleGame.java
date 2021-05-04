@@ -1,4 +1,8 @@
-package com.jitterted.ebp.blackjack;
+package com.jitterted.ebp.blackjack.adapter.in.console;
+
+import com.jitterted.ebp.blackjack.domain.Game;
+
+import static org.fusesource.jansi.Ansi.ansi;
 
 public class ConsoleGame {
 
@@ -14,6 +18,10 @@ public class ConsoleGame {
         consoleGame.start();
     }
 
+    public static void resetScreen() {
+        System.out.println(ansi().reset());
+    }
+
     public void start() {
         Game.displayWelcomeScreen();
 
@@ -25,9 +33,9 @@ public class ConsoleGame {
 
         game.displayFinalGameState();
 
-        game.determineOutcome();
+        game.displayOutcome();
 
-        Game.resetScreen();
+        resetScreen();
     }
 
     public void playerPlays() {

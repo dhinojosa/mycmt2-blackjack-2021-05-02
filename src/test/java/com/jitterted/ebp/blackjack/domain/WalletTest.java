@@ -1,11 +1,12 @@
-package com.jitterted.ebp.blackjack;
+package com.jitterted.ebp.blackjack.domain;
 
+import com.jitterted.ebp.blackjack.domain.Wallet;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.*;
 
 public class WalletTest {
-  
+
   @Test
   public void newWalletIsEmpty() throws Exception {
     Wallet wallet = new Wallet();

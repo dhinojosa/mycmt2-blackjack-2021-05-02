@@ -1,5 +1,7 @@
-package com.jitterted.ebp.blackjack;
+package com.jitterted.ebp.blackjack.domain;
 
+import com.jitterted.ebp.blackjack.adapter.in.console.ConsoleGame;
+import com.jitterted.ebp.blackjack.adapter.in.console.ConsoleHand;
 import org.fusesource.jansi.Ansi;
 
 import java.util.Scanner;
@@ -17,11 +19,7 @@ public class Game {
     public static void main(String[] args) {
         displayWelcomeScreen();
         playGame();
-        resetScreen();
-    }
-
-    static void resetScreen() {
-        System.out.println(ansi().reset());
+        ConsoleGame.resetScreen();
     }
 
     private static void playGame() {
@@ -30,7 +28,7 @@ public class Game {
         game.play();
     }
 
-    static void displayWelcomeScreen() {
+    public static void displayWelcomeScreen() {
         System.out.println(ansi()
             .bgBright(Ansi.Color.WHITE)
             .eraseScreen()
@@ -56,7 +54,7 @@ public class Game {
 
         displayFinalGameState();
 
-        determineOutcome();
+        displayOutcome();
     }
 
     private void dealRoundOfCards() {
@@ -65,22 +63,26 @@ public class Game {
         dealerHand.drawFrom(deck);
     }
 
-    void determineOutcome() {
+    public String determineOutcome() {
         if (playerHand.isBusted()) {
-            System.out.println("You Busted, so you lose.  💸");
+            return "You Busted, so you lose.  💸";
         } else if (dealerHand.isBusted()) {
-            System.out.println("Dealer went BUST, Player wins! Yay for you!! " +
-                "💵");
+            return "Dealer went BUST, Player wins! Yay for you!! 💵";
         } else if (playerHand.beats(dealerHand)) {
-            System.out.println("You beat the Dealer! 💵");
+            return "You beat the Dealer! 💵";
         } else if (playerHand.pushes(dealerHand)) {
-            System.out.println("Push: Nobody wins, we'll call it even.");
+            return "Push: Nobody wins, we'll call it even.";
         } else {
-            System.out.println("You lost to the Dealer. 💸");
+            return "You lost to the Dealer. 💸";
         }
     }
 
-    void dealerTurn() {
+    //Likely to be move
+    public void displayOutcome() {
+        System.out.println(determineOutcome());
+    }
+
+    public void dealerTurn() {
         // Dealer makes its choice automatically based on a simple heuristic
         // (<=16 must hit, =>17 must stand)
         if (!playerHand.isBusted()) {
@@ -111,13 +113,13 @@ public class Game {
         }
     }
 
-    String inputFromPlayer() {
+    public String inputFromPlayer() {
         System.out.println("[H]it or [S]tand?");
         Scanner scanner = new Scanner(System.in);
         return scanner.nextLine();
     }
 
-    void displayGameState() {
+    public void displayGameState() {
         System.out.print(ansi().eraseScreen().cursor(1, 1));
         System.out.println("Dealer has: ");
         System.out.println(ConsoleHand.displayFirstCard(dealerHand)); //
@@ -146,7 +148,7 @@ public class Game {
                 .a("└─────────┘"));
     }
 
-    void displayFinalGameState() {
+    public void displayFinalGameState() {
         System.out.print(ansi().eraseScreen().cursor(1, 1));
         System.out.println("Dealer has: ");
         System.out.println(ConsoleHand.cardsAsString(dealerHand));
