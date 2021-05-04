@@ -15,6 +15,40 @@ public class GameOutcomeTest {
         game.playerHits();
 
         assertThat(game.determineOutcome())
-            .isEqualTo("You Busted, so you lose.  💸");
+            .isEqualTo(GameOutcome.PLAYER_BUSTED);
     }
+
+    //player beats dealer and player goes bust
+    @Test
+    void playerBeatsDealer() {
+        StubDeck deck = new StubDeck(
+            Rank.TEN, //Player
+            Rank.TEN, //Dealer
+            Rank.TEN, //Player
+            Rank.SIX);//Dealer
+
+        Game game = new Game(deck);
+        game.initialDeal();
+
+        assertThat(game.determineOutcome())
+            .isEqualTo(GameOutcome.PLAYER_WINS);
+    }
+
+    @Test
+    void playerBeatsDealerWithAHit() {
+        StubDeck deck = new StubDeck(
+            Rank.EIGHT, //Player
+            Rank.TEN, //Dealer
+            Rank.TWO, //Player
+            Rank.SIX, //Dealer
+            Rank.ACE);//Player
+
+        Game game = new Game(deck);
+        game.initialDeal();
+        game.playerHits();
+
+        assertThat(game.determineOutcome())
+            .isEqualTo(GameOutcome.PLAYER_WINS);
+    }
+
 }

@@ -36,7 +36,7 @@ public class ConsoleGame {
     }
 
     public void displayOutcome() {
-        System.out.println(game.determineOutcome());
+        System.out.println(game.determineOutcome().message());
     }
 
     public String inputFromPlayer() {
