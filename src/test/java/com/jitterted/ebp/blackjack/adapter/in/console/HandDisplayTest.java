@@ -1,6 +1,5 @@
 package com.jitterted.ebp.blackjack.adapter.in.console;
 
-import com.jitterted.ebp.blackjack.adapter.in.console.ConsoleHand;
 import com.jitterted.ebp.blackjack.domain.Card;
 import com.jitterted.ebp.blackjack.domain.Hand;
 import com.jitterted.ebp.blackjack.domain.Rank;
