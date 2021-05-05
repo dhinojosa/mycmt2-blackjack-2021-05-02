@@ -6,6 +6,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -18,5 +19,11 @@ public class WebTest {
     public void testHomePageIs200k() throws Exception {
        mockMvc.perform(get("/index.html"))
               .andExpect(status().isOk());
+    }
+
+    @Test
+    void testStartGameIs200k() throws Exception {
+        mockMvc.perform(post("/start-game"))
+               .andExpect(status().isOk());
     }
 }
