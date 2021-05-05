@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.redirectedUrl;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -24,6 +25,7 @@ public class WebTest {
     @Test
     void testStartGameIs200k() throws Exception {
         mockMvc.perform(post("/start-game"))
-               .andExpect(status().isOk());
+               .andExpect(status().is3xxRedirection())
+               .andExpect(redirectedUrl("/game"));
     }
 }
