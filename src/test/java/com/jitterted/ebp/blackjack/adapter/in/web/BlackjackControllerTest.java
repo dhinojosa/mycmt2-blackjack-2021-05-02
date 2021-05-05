@@ -9,14 +9,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class BlackjackControllerTest {
 
+
     @Test
     void testStartGameInitialCardsAreDealt() {
-        Game game = new Game();
-        BlackjackController blackjackController = new BlackjackController(game);
+        GameService gameService = new GameService();
+        BlackjackController blackjackController = new BlackjackController(gameService);
 
         blackjackController.startGame();
 
-        assertThat(game.playerHand().cards()).hasSize(2);
+        assertThat(gameService.currentGame().playerHand().cards()).hasSize(2);
     }
 
     @Test
@@ -27,8 +28,8 @@ public class BlackjackControllerTest {
             new Card(Suit.SPADES, Rank.KING), //play
             new Card(Suit.CLUBS, Rank.THREE));//deal
 
-        Game game = new Game(stubDeck);
-        BlackjackController blackjackController = new BlackjackController(game);
+        GameService gameService = new GameService(stubDeck);
+        BlackjackController blackjackController = new BlackjackController(gameService);
         blackjackController.startGame();
 
         Model model = new ConcurrentModel();
@@ -37,5 +38,46 @@ public class BlackjackControllerTest {
         GameView gameView = (GameView) model.getAttribute("gameView");
 
         assertThat(gameView.getDealerCards()).containsExactly("2♥", "3♣");
+    }
+
+    @Test
+    void testThatWhenHitTheTotalNumberOfCardsIsThree() {
+        GameService gameService = new GameService();
+        BlackjackController blackjackController = new BlackjackController(gameService);
+        blackjackController.startGame();
+        blackjackController.hit();
+        assertThat(gameService.currentGame().playerHand().cards()).hasSize(3);
+    }
+
+    @Test
+    void testThatWeGoToTheDonePageWhenThePlayerGoesBust() {
+        StubDeck stubDeck = new StubDeck(
+            new Card(Suit.CLUBS, Rank.TEN), //play
+            new Card(Suit.HEARTS, Rank.TEN), //deal
+            new Card(Suit.SPADES, Rank.KING), //play
+            new Card(Suit.CLUBS, Rank.JACK),
+            new Card(Suit.DIAMONDS, Rank.EIGHT));//deal
+
+
+        BlackjackController blackjackController = new BlackjackController(new GameService(stubDeck));
+        blackjackController.startGame();
+        String page = blackjackController.hit();
+        assertThat(page).isEqualTo("redirect:/done");
+    }
+
+    @Test
+    void testDonePageShowsFinalGameViewWithOutcome() {
+        BlackjackController blackjackController = new BlackjackController(new GameService());
+        blackjackController.startGame();
+        Model model = new ConcurrentModel();
+        blackjackController.done(model);
+
+        assertThat(model.getAttribute("gameView"))
+            .isNotNull()
+            .isInstanceOf(GameView.class);
+
+        String outcome = (String) model.getAttribute("outcome");
+        assertThat(outcome).isNotBlank();
+
     }
 }
