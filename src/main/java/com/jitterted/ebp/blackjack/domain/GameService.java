@@ -6,7 +6,7 @@ public class GameService {
     private Deck deck;
 
     public void createNewGame() {
-        this.game = new Game(deck);
+        this.game = new Game(deck); //was deck
     }
 
     public GameService() {
