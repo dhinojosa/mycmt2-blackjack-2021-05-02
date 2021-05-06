@@ -19,13 +19,13 @@ public class Game {
         this(deck, new DoNothingGameMonitor());
     }
 
+    public Game(GameMonitor gameMonitor) {
+        this(new Deck(), gameMonitor);
+    }
+
     public Game(Deck deck, GameMonitor gameMonitor) {
         this.deck = deck;
         this.gameMonitor = gameMonitor;
-    }
-
-    public Game(GameMonitor gameMonitor) {
-        this(new Deck(), gameMonitor);
     }
 
     public void initialDeal() {
