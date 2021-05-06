@@ -16,7 +16,9 @@ public class GameResultDTO {
     }
 
     public static GameResultDTO of(Game game) {
-        return new GameResultDTO("Dan", game.determineOutcome().toString(), game.playerHand().displayValue(), game.dealerHand().displayValue());
+        return new GameResultDTO("Dan", game.determineOutcome().toString(),
+            game.playerHand().displayValue(),
+            game.dealerHand().displayValue());
     }
 
     public String getPlayerName() {
