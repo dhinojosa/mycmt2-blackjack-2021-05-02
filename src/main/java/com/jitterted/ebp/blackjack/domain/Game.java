@@ -29,7 +29,9 @@ public class Game {
 
     //GOAL: Use this and rename to determineOutcome
     public GameOutcome determineOutcome() {
-        if (playerHand.isBusted()) {
+        if (playerHand.hasBlackjack()) {
+            return GameOutcome.BLACKJACK;
+        } else if (playerHand.isBusted()) {
             return GameOutcome.PLAYER_BUSTED;
         } else if (dealerHand.isBusted()) {
             return GameOutcome.DEALER_BUSTED;

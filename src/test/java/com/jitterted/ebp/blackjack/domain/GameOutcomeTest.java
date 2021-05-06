@@ -51,4 +51,29 @@ public class GameOutcomeTest {
             .isEqualTo(GameOutcome.PLAYER_WINS);
     }
 
+    @Test
+    public void playerDrawsBlackjack() throws Exception {
+        StubDeck stubDeck = new StubDeck(Rank.KING, Rank.TWO,
+            Rank.ACE, Rank.EIGHT);
+
+        Game game = new Game(stubDeck);
+        game.initialDeal();
+
+        assertThat(game.determineOutcome())
+            .isEqualByComparingTo(GameOutcome.BLACKJACK);
+    }
+
+    @Test
+    public void playerDraws21WithThreeCardsButIsNotBlackjack() throws Exception {
+        Deck deck = new StubDeck(Rank.SEVEN, Rank.TEN,
+            Rank.SEVEN, Rank.EIGHT,
+            Rank.SEVEN);
+        Game game = new Game(deck);
+        game.initialDeal();
+        game.playerHits();
+        game.playerStands();
+
+        assertThat(game.determineOutcome())
+            .isNotEqualByComparingTo(GameOutcome.BLACKJACK);
+    }
 }
