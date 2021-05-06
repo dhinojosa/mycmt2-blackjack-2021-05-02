@@ -80,4 +80,52 @@ public class BlackjackControllerTest {
         assertThat(outcome).isNotBlank();
 
     }
+
+    @Test
+    public void standResultsInGamePlayerIsDone() throws Exception {
+        GameService gameService = new GameService();
+        BlackjackController blackjackController = new BlackjackController(gameService);
+        blackjackController.startGame();
+
+        String redirectPage = blackjackController.stand();
+
+        assertThat(redirectPage)
+            .isEqualTo("redirect:/done");
+
+        assertThat(gameService.currentGame().isPlayerDone())
+            .isTrue();
+    }
+
+    @Test
+    public void standResultsInPlayerLosingToDealerAfterDealerTakesTurn() throws Exception {
+        Deck dealerBeatsPlayerAfterDrawingAdditionalCardDeck =
+            new StubDeck(
+                Rank.TEN, //player
+                Rank.QUEEN, //dealer
+                Rank.EIGHT, //player
+                Rank.FIVE,  //dealer
+                Rank.SIX);  //dealer
+        GameService gameService = new GameService(dealerBeatsPlayerAfterDrawingAdditionalCardDeck);
+        BlackjackController blackjackController = new BlackjackController(gameService);
+        blackjackController.startGame();
+
+        blackjackController.stand();
+
+        assertThat(gameService.currentGame().determineOutcome())
+            .isEqualByComparingTo(GameOutcome.PLAYER_LOSES);
+    }
+
+    @Test
+    public void dealerDrawsAdditionalCardAfterPlayerStands() throws Exception {
+        Deck dealerDrawsAdditionalCardDeck = new StubDeck(Rank.TEN, Rank.QUEEN,
+            Rank.EIGHT, Rank.FIVE,
+            Rank.SIX);
+        Game game = new Game(dealerDrawsAdditionalCardDeck);
+        game.initialDeal();
+
+        game.playerStands();
+
+        assertThat(game.dealerHand().cards())
+            .hasSize(3);
+    }
 }

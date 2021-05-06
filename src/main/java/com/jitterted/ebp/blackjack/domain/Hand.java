@@ -2,6 +2,7 @@ package com.jitterted.ebp.blackjack.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Hand {
     private final List<Card> cards = new ArrayList<>();
@@ -11,6 +12,13 @@ public class Hand {
     }
 
     public Hand() {
+    }
+
+    public static List<String> convertHandToString(Hand hand) {
+        return hand.cards()
+                   .stream()
+                   .map(c -> c.rank().display() + c.suit().symbol())
+                   .collect(Collectors.toList());
     }
 
     private int value() {
